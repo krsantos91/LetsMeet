@@ -1,0 +1,41 @@
+body {
+	background: url(../images/kevin.png) no-repeat center center;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+body, h1, h2, h3, h4, h5, h6, p {
+	font-family: 'Short Stack', cursive;
+}
+
+
+/*body:after {
+	content: '';
+	position: absolute;
+	height: 100vh;
+	width: 100%;
+	background: rgba(0,0,0,.5);
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+
+.jumbotron {
+	background: rgba(237,237,237,.95);
+	box-shadow: 0 0 30px #666;
+	z-index: 2;
+}*/
+
+main {
+	background: white;
+	padding: 2rem;
+}
+
+header {
+	background: white;
+}
+
+#Map {
+	height: 400px;
+	margin-bottom: 30px;
+}

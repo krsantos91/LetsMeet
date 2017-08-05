@@ -1,0 +1,20 @@
+#List .list-item {
+	display: block;
+	margin-left: 10px;
+}
+
+#List .panel-body {
+	transition: all ease-in-out 200ms;
+	max-height: 1000px;
+	overflow: hidden;
+}
+
+#List .panel-body:hover {
+	background-color: #337ab7;
+	color: #FFFFFF;
+	cursor: pointer;
+}
+
+#List .panel-body label.first {
+	margin-top: 15px;
+}

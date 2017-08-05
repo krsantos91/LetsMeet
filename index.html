@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>App</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Latest compiled and minified CSS -->
+		<link href="https://fonts.googleapis.com/css?family=Short+Stack" rel="stylesheet">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<link rel="stylesheet" href="assets/css/style.css">
+		<link rel="stylesheet" href="assets/css/maps.css">
+
+	</head>
+<body>
+	<section id="Page">
+		<div class="container" id="StartUp" style="margin-top:100px">
+		  <div class="col-sm-3"></div>
+		  <div class="col-sm-6">
+		    <div class="jumbotron" style="text-align:center">
+		      <div class="row">
+		        <h3><b>Welcome to MeetUp!</b></h3>
+		      </div>
+		      <div class="row">
+		        <div class="form-group">
+		            <label for="NewMeet">Create a new MeetUp for others to join</label>                            
+		            <input class="form-control" id="NewMeet" type="text" placeholder="Please enter a name for your chatroom" style="margin-bottom:3px">
+		        </div>
+		        <div class="form-group">
+		            <input type="number" name="NumberOfUsers" id="NumberOfUsers" class="form-control" placeholder="Number Of Users">         
+		        </div>
+		         <button class="btn btn-success" id="SubmitNewMeetUp" type="submit">Create a New MeetUp</button>   
+		        <h4>Or</h4>
+		        <div class="form-group">
+		            <label for="ExistingMeetUp">Enter the 10 digift alphanumeric sitekey for an existing MeetUp</label>
+		            <input type="text" class="form-control" id="ExistingMeetUp" placeholder="e.g. upHcpS0PMq" style="margin-bottom:3px">
+		        </div>
+		        <button class="btn btn-primary" id="SubmitExistingMeetUp" tyep="submit">Join an Existing MeetUp</button>      
+		      </div>      
+		    </div>
+		  </div>
+		  <div class="col-sm-3"></div>
+		</div>
+		<div class="container" id = "main-modal">
+		        <div class="modal fade" id = "main-error" tabindex="-1" role="dialog">
+		          <div class="modal-dialog" role="document">
+		            <div class="modal-content">
+		              <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		                <h4 class="modal-title">Error</h4>
+		              </div>
+		              <div class="modal-body">
+		                <p id = "modal-msg">You did not enter 10 characters. Please try again.</p>
+		              </div>
+		              <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		              </div>
+		            </div><!-- /.modal-content -->
+		          </div><!-- /.modal-dialog -->
+		        </div><!-- /.modal -->
+		    </div>
+		<header id="Header" class="container hide">
+			<div id="PillsNavigation" class="row">
+				<ul class="nav nav-tabs col-xs-12" role="tablist">
+					<li role="presentation" class="active"><a href="#Search" aria-controls="Search" role="tab" data-toggle="tab">Search</a></li>
+					<li role="presentation"><a href="#Locations" aria-controls="Locations" role="tab" data-toggle="tab">MeetUp Locations</a></li>
+					<li role="presentation"><a href="#Maps" aria-controls="Maps" role="tab" data-toggle="tab">Map</a></li>
+					<li role="presentation"><a href="#Chat" aria-controls="Chat" role="tab" data-toggle="tab">Chat</a></li>
+				</ul>
+			</div>
+		</header>
+
+		<section id="Title">
+			<div class="container jumbotron hide">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<h1 class="text-center">MeetUp Application</h1>
+						<div id="ChatTitle"></div>
+						<div id="sitekey"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	<main class="container hide">
+		<section id="TabContent" class="row">
+				<div class="col-xs-12">
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane fade in active" id="Search"></div>
+					<div role="tabpanel" class="tab-pane fade" id="Locations">Meet Up Locations List</div>
+					<div role="tabpanel" class="tab-pane fade" id="Maps">
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="Chat">
+			    		<div class="row">
+			    			<div class="col-xs-12">
+			    				<div class="panel panel-default">
+			    					<div class="panel-heading">
+			    						<h4 id="ChatTitle">Chat room for (enter meetup name here)</h4>
+			    					</div>
+			    					<div class="panel-body" style="border-bottom:1px solid lightgrey">
+			    						<div class="col-xs-10">
+			    							<div id="ChatBox" style="width:auto;height:300px;max-height:300px;overflow:auto">
+			    							</div>			    						
+			    						</div>
+			    						<div class="col-xs-2" style="border-left:1px solid grey;height:300px;text-align:center">
+			    							<div class="row">
+			    								<b>Active Users</b>
+			    							</div>
+			    							<hr>
+			    							<div class="row" id="UserList"></div>
+			    						</div>
+			    					</div>
+			    					<form style="margin:3px 5px">
+	          							<div class="form-group">
+	                							<label for="Message">Message: </label>
+	          								<div class="input-group">	                							
+		                						<input class="form-control" id="Message" type="text" placeholder="Message">
+		                						<span class="input-group-btn">
+		                							<button class="btn btn-success" id="SubmitMessage" type="submit"><span class="glyphicon glyphicon-send"></span></button>	
+		                						</span> 
+	          								</div>
+	            							<div class="btn btn-default btn-xs" id="Italic"><i>I</i></div>
+	            							<div class="btn btn-default btn-xs" id="Bold"><b>B</b></div>
+	            							<div class="btn btn-default btn-xs" id="Underline"><u>abc</u></div>      
+	          							</div>
+	        						</form>			    					
+			    				</div>
+			    			</div>
+			    		</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div id="Place"></div>
+	</main>
+
+		<!-- google places api -->
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFZ1CZ31OuUgv7cCm9JBsw96kpa_zgaoE&libraries=places"></script>
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<!-- Bootstrap js -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<!--Firebase -->
+		<script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+		<!-- Moment.js -->
+		<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+		<!-- Bootstarp.js (For Tabs) -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<!-- functions.js -->
+		<script src="assets/js/functions.js"></script>
+		<!-- maps.js -->
+		<script type="text/javascript" src="assets/js/maps.js"></script>
+	</section>
+</body>
+</html>
