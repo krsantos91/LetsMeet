@@ -3,13 +3,21 @@ var geocoder = new google.maps.Geocoder();
 var limit = 0;
 var place = document.getElementById('Place');
 
+// var config = {
+//   apiKey: "AIzaSyC6B82IlusPIV2rMJA79A9z6uAvSr-SVEE",
+//   authDomain: "friendlychat-56d31.firebaseapp.com",
+//   databaseURL: "https://friendlychat-56d31.firebaseio.com",
+//   projectId: "friendlychat-56d31",
+//   storageBucket: "friendlychat-56d31.appspot.com",
+//   messagingSenderId: "379256444845"
+// };
 var config = {
-  apiKey: "AIzaSyC6B82IlusPIV2rMJA79A9z6uAvSr-SVEE",
-  authDomain: "friendlychat-56d31.firebaseapp.com",
-  databaseURL: "https://friendlychat-56d31.firebaseio.com",
-  projectId: "friendlychat-56d31",
-  storageBucket: "friendlychat-56d31.appspot.com",
-  messagingSenderId: "379256444845"
+  apiKey: "AIzaSyDlBcC5OWK63YIjKYTI1PfCy_Zfstm9Xy8",
+  authDomain: "andres-meetup.firebaseapp.com",
+  databaseURL: "https://andres-meetup.firebaseio.com",
+  projectId: "andres-meetup",
+  storageBucket: "andres-meetup.appspot.com",
+  messagingSenderId: "956032318275"
 };
 firebase.initializeApp(config);
 
@@ -57,11 +65,14 @@ var chatroom = {
     chatroom.current_message = $("#Message").val().trim();
     $("#Message").val("");
     $("#Message").focus();
-    database.ref(sitekey + '/chat').set({
-      LatestName: chatroom.username,
-      LatestMessage: chatroom.current_message,
-      Chatname: chatroom.chatname
-    });
+    database.ref(sitekey + '/chat').once("value").then(function(snapshot){
+      database.ref(sitekey + '/chat').set({
+        LatestName: chatroom.username,
+        LatestMessage: chatroom.current_message,
+        Chatname: chatroom.chatname,
+        NumberOfUsers: snapshot.val().NumberOfUsers
+      });
+  });
   },
 
   scrollSmoothToBottom: function(id) {
