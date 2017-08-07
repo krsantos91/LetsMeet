@@ -197,8 +197,15 @@ function createSecondForm() {
 }
 
 function locationFormHandler() {
+  var name = "";
+  var pname = $('#UserName').val().trim();
+  // Regular expressions to get rid of < and > for potential SQL injection
+  var re = new RegExp('[^<>]+',"g");
+  var arrayStrings = pname.match(re);
+  arrayStrings.forEach(function(string){
+    name += string;
+  })
 
-  var name = $('#UserName').val().trim();
   var location = $('#Location').val().trim();
 
   chatroom.username = name;
