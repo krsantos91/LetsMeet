@@ -4,12 +4,12 @@ var limit = 0;
 var place = document.getElementById('Place');
 
 var config = {
-  apiKey: "AIzaSyC6B82IlusPIV2rMJA79A9z6uAvSr-SVEE",
-  authDomain: "friendlychat-56d31.firebaseapp.com",
-  databaseURL: "https://friendlychat-56d31.firebaseio.com",
-  projectId: "friendlychat-56d31",
-  storageBucket: "friendlychat-56d31.appspot.com",
-  messagingSenderId: "379256444845"
+  apiKey: "AIzaSyBswMwyD7IWpaSv2NuQD5uscHK4YeEjM8s",
+  authDomain: "ks-firebase-app1.firebaseapp.com",
+  databaseURL: "https://ks-firebase-app1.firebaseio.com",
+  projectId: "ks-firebase-app1",
+  storageBucket: "ks-firebase-app1.appspot.com",
+  messagingSenderId: "1024949813364"
 };
 firebase.initializeApp(config);
 
@@ -44,11 +44,13 @@ var chatroom = {
     });
     database.ref(sitekey + '/chatconnections').on("child_added", function(snapshot) {
       $("#UserList").append('<div class="row" id="' + snapshot.val().userName + '"><span class="glyphicon glyphicon-ok" style="font-size:12px;color:green"></span> ' + snapshot.val().userName + '</div>');
+      $("#UserJoined").append('<div class="bg-success" id="' + snapshot.val().userName + '_user" style="border-radius:5px;height:35px;vertical-align:center;width:100%;text-align:center"><h3>'+ snapshot.val().userName + ' has joined</h3></div>')
     }, function(errorObject) {
       console.log("The read failed: " + errorObject.code);
     });
     database.ref(sitekey + '/chatconnections').on("child_removed", function(snapshot) {
       $("#" + snapshot.val().userName).remove();
+      $("#" + snapshot.val().userName +'_user').remove();      
     });
   },
 
@@ -57,7 +59,7 @@ var chatroom = {
     chatroom.current_message = $("#Message").val().trim();
     $("#Message").val("");
     $("#Message").focus();
-    database.ref(sitekey + '/chat').set({
+    database.ref(sitekey + '/chat').update({
       LatestName: chatroom.username,
       LatestMessage: chatroom.current_message,
       Chatname: chatroom.chatname
@@ -321,6 +323,7 @@ function createMap () {
 /***initialize map and business search****/
 function initMap(latitude, longitude) {
   var pyrmont = {lat: latitude, lng: longitude};
+  $('#Lobby').remove();
   $('#Search').append(
 
   	'<div id="Map"></div>' +
