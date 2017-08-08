@@ -29,8 +29,8 @@ var chatroom = {
   UpdateChat: function() {
     database.ref(sitekey + '/chat').on("value", function(snapshot) {
       if (snapshot.child("LatestName").exists() && snapshot.child("LatestMessage").exists()) {
-        $("#ChatTitle").text("Chatroom: " + snapshot.val().Chatname);
-        $('#sitekey').text(sitekey);
+        $("#ChatTitle").text(' ' + snapshot.val().Chatname);
+        $('#sitekey').text('SITEKEY(Use to share this meet up): ' + sitekey);
         chatroom.chatname = snapshot.val().Chatname;
         chatroom.current_message = snapshot.val().LatestMessage;
         chatroom.current_name = snapshot.val().LatestName;
@@ -299,6 +299,13 @@ function createMap () {
 	});
 
     database.ref(sitekey + '/connections').on("value", function(snapshot) {
+      var difference = users - snapshot.numChildren();
+      if (difference > 1){
+        $("#waiting").text('Waiting for ' +  (users - snapshot.numChildren()) + ' more people')
+      }
+      else{
+        $("#waiting").text('Waiting for ' +  (users - snapshot.numChildren()) + ' more person')
+      }
       // var active_users = snapshot.numChildren();
       console.log(snapshot.numChildren() === users, users);
 	      if (snapshot.numChildren() === users) {

@@ -5,14 +5,14 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- Latest compiled and minified CSS -->
-		<link href="https://fonts.googleapis.com/css?family=Short+Stack" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Reem+Kufi" rel="stylesheet">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
 		<!-- Optional theme -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
 		<link rel="stylesheet" href="assets/css/style.css">
 		<link rel="stylesheet" href="assets/css/maps.css">
+		<script src="https://use.fontawesome.com/bc19a41229.js"></script>	
 
 	</head>
 <body>
@@ -63,20 +63,19 @@
 		        </div><!-- /.modal -->
 		    </div>
 		<header id="Header" class="container hide">
-			<div id="PillsNavigation" class="row">
+<!-- 			<div id="PillsNavigation" class="row">
 				<ul class="nav nav-tabs col-xs-12" role="tablist">
-					<li role="presentation" class="active"><a href="#Search" aria-controls="Search" role="tab" data-toggle="tab">Search</a></li>
+					<li role="presentation" class="active"><a href="#Search" aria-controls="Search" role="tab" data-toggle="tab">Home</a></li>
 					<li role="presentation"><a href="#Chat" aria-controls="Chat" role="tab" data-toggle="tab">Chat</a></li>
 				</ul>
-			</div>
+			</div> -->
 		</header>
 
 		<section id="Title">
 			<div class="container jumbotron hide">
 				<div class="row">
 					<div class="col-xs-12 text-center">
-						<h1 class="text-center">MeetUp Application</h1>
-						<div id="ChatTitle"></div>
+						<h2 class="text-center">Let's Meet: <span id="ChatTitle"></span></h2>
 						<div id="sitekey"></div>
 					</div>
 				</div>
@@ -84,16 +83,27 @@
 		</section>
 
 	<main class="container hide">
+		<div id="PillsNavigation" class="row">
+			<ul class="nav nav-tabs col-xs-12"  role="tablist">
+				<li role="presentation" class="active"><a href="#Search" aria-controls="Search" role="tab" data-toggle="tab">Home</a></li>
+				<li role="presentation"><a href="#Chat" aria-controls="Chat" role="tab" data-toggle="tab">Chat</a></li>
+			</ul>
+		</div>
 		<section id="TabContent" class="row">
 			<div class="col-xs-12">
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane fade in active" id="Search">
-						<div class="row" id="Lobby">
+						<div class="row" id="Lobby" style="text-align:center;padding-top:10px">
 							<div class="col-xs-6">
 								<div id="UserJoined"></div>								
 							</div>
-							<div class="col-xs-6">
-								<div id="Waiting">waiting for __ more people</div>								
+							<div class="col-xs-6" style="vertical-align: center">
+								<div>
+									<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><span class="sr-only">Loading...</span>
+									<br>
+									<br>
+									<span id="waiting"></span>
+								</div>								
 							</div>							
 						</div>
 
