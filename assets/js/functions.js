@@ -3,15 +3,24 @@ var geocoder = new google.maps.Geocoder();
 var limit = 0;
 var place = document.getElementById('Place');
 
-  var config = {
-    apiKey: "AIzaSyDlBcC5OWK63YIjKYTI1PfCy_Zfstm9Xy8",
-    authDomain: "andres-meetup.firebaseapp.com",
-    databaseURL: "https://andres-meetup.firebaseio.com",
-    projectId: "andres-meetup",
-    storageBucket: "andres-meetup.appspot.com",
-    messagingSenderId: "956032318275"
-  };
-  firebase.initializeApp(config);
+
+// var config = {
+//   apiKey: "AIzaSyC6B82IlusPIV2rMJA79A9z6uAvSr-SVEE",
+//   authDomain: "friendlychat-56d31.firebaseapp.com",
+//   databaseURL: "https://friendlychat-56d31.firebaseio.com",
+//   projectId: "friendlychat-56d31",
+//   storageBucket: "friendlychat-56d31.appspot.com",
+//   messagingSenderId: "379256444845"
+// };
+var config = {
+  apiKey: "AIzaSyDlBcC5OWK63YIjKYTI1PfCy_Zfstm9Xy8",
+  authDomain: "andres-meetup.firebaseapp.com",
+  databaseURL: "https://andres-meetup.firebaseio.com",
+  projectId: "andres-meetup",
+  storageBucket: "andres-meetup.appspot.com",
+  messagingSenderId: "956032318275"
+};
+firebase.initializeApp(config);
 
 
 var database = firebase.database();
@@ -188,8 +197,15 @@ function createSecondForm() {
 }
 
 function locationFormHandler() {
+  var name = "";
+  var pname = $('#UserName').val().trim();
+  // Regular expressions to get rid of < and > for potential SQL injection
+  var re = new RegExp('[^<>]+',"g");
+  var arrayStrings = pname.match(re);
+  arrayStrings.forEach(function(string){
+    name += string;
+  })
 
-  var name = $('#UserName').val().trim();
   var location = $('#Location').val().trim();
 
   chatroom.username = name;
