@@ -130,29 +130,52 @@ $(document).ready(function() {
 
 
 
+  // $("#SubmitExistingMeetUp").on("click", function(event) {
+  //   //edge empty input
+  //   event.preventDefault();
+  //   var enteredSiteKey = $('#ExistingMeetUp').val().trim();
+  //   sitekey = $("#ExistingMeetUp").val().trim();
+  //   database.ref(sitekey).on("value", function(snapshot) {
+  //     if (snapshot.exists() && enteredSiteKey !== '') {
+
+  //       createSecondForm();
+
+  //       $('#SubmitLocation').click(function(e) {
+  //         e.preventDefault();
+  //         locationFormHandler();
+  //         // selectAdmin();
+  //       });
+
+  //     } else {
+  //       showModal("Sitekey doesnt exist");
+  //       $('#ExistingMeetUp').val('').focus();
+
+  //     }
+  //   });
+
+  // });
   $("#SubmitExistingMeetUp").on("click", function(event) {
     //edge empty input
     event.preventDefault();
     var enteredSiteKey = $('#ExistingMeetUp').val().trim();
     sitekey = $("#ExistingMeetUp").val().trim();
-    database.ref(sitekey).on("value", function(snapshot) {
+    database.ref(sitekey).once("value").then(function(snapshot){
       if (snapshot.exists() && enteredSiteKey !== '') {
-
-        createSecondForm();
-
-        $('#SubmitLocation').click(function(e) {
-          e.preventDefault();
-          locationFormHandler();
-          // selectAdmin();
-        });
-
+        console.log(parseInt(snapshot.val().chat.NumberOfUsers),Object.keys(snapshot.val().connections).length);
+        if(parseInt(snapshot.val().chat.NumberOfUsers) === Object.keys(snapshot.val().connections).length){
+          showModal("This meet is currently full.")
+        } else{
+          createSecondForm();
+          $('#SubmitLocation').click(function(e) {
+            e.preventDefault();
+            locationFormHandler();
+          });
+        };
       } else {
         showModal("Sitekey doesnt exist");
         $('#ExistingMeetUp').val('').focus();
-
-      }
+      };
     });
-
   });
 
 }); // doc.ready
