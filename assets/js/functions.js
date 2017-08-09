@@ -3,15 +3,15 @@ var geocoder = new google.maps.Geocoder();
 var limit = 0;
 var place = document.getElementById('Place');
 
-var config = {
-  apiKey: "AIzaSyBswMwyD7IWpaSv2NuQD5uscHK4YeEjM8s",
-  authDomain: "ks-firebase-app1.firebaseapp.com",
-  databaseURL: "https://ks-firebase-app1.firebaseio.com",
-  projectId: "ks-firebase-app1",
-  storageBucket: "ks-firebase-app1.appspot.com",
-  messagingSenderId: "1024949813364"
-};
-firebase.initializeApp(config);
+  var config = {
+    apiKey: "AIzaSyDlBcC5OWK63YIjKYTI1PfCy_Zfstm9Xy8",
+    authDomain: "andres-meetup.firebaseapp.com",
+    databaseURL: "https://andres-meetup.firebaseio.com",
+    projectId: "andres-meetup",
+    storageBucket: "andres-meetup.appspot.com",
+    messagingSenderId: "956032318275"
+  };
+  firebase.initializeApp(config);
 
 
 var database = firebase.database();
@@ -301,9 +301,11 @@ function createMap () {
     database.ref(sitekey + '/connections').on("value", function(snapshot) {
       var difference = users - snapshot.numChildren();
       if (difference > 1){
+        removeMap();
         $("#waiting").text('Waiting for ' +  (users - snapshot.numChildren()) + ' more people')
       }
-      else{
+      else if(difference === 1){
+        removeMap();
         $("#waiting").text('Waiting for ' +  (users - snapshot.numChildren()) + ' more person')
       }
       // var active_users = snapshot.numChildren();
@@ -325,6 +327,27 @@ function createMap () {
 	      }
 
     });
+}
+
+function removeMap(){
+  $("#Map").remove();
+  $("#List").remove();
+  $("#Place").remove();
+  $("#Search").append(
+          '<div class="row" id="Lobby" style="text-align:center;padding-top:10px">'+
+              '<div class="col-xs-6">' + 
+                '<div id="UserJoined"></div>'  +             
+              '</div>' + 
+              '<div class="col-xs-6" style="vertical-align: center">' +
+                '<div>' +
+                  '<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><span class="sr-only">Loading...</span>' +
+                  '<br>' +
+                  '<br>' +
+                  '<span id="waiting"></span>' +
+                '</div>'  +            
+              '</div>' +             
+            '</div>'
+    );
 }
 
 /***initialize map and business search****/
