@@ -31,7 +31,7 @@ var chatroom = {
     database.ref(sitekey + '/chat').on("value", function(snapshot) {
       if (snapshot.child("LatestName").exists() && snapshot.child("LatestMessage").exists()) {
         $("#ChatTitle").text(' ' + snapshot.val().Chatname);
-        $('#sitekey').append('SITEKEY (Use to share this meet up): <span>' + sitekey + '</span>');
+        $('#sitekey').html('SITEKEY (Use to share this meet up): <span>' + sitekey + '</span>');
         chatroom.chatname = snapshot.val().Chatname;
         chatroom.current_message = snapshot.val().LatestMessage;
         chatroom.current_name = snapshot.val().LatestName;
@@ -45,9 +45,6 @@ var chatroom = {
     });
     database.ref(sitekey + '/chatconnections').on("child_added", function(snapshot) {
       $("#UserList").append('<div class="row" id="' + snapshot.val().userName + '"><span class="glyphicon glyphicon-ok" style="font-size:12px;color:green"></span> ' + snapshot.val().userName + '</div>');
-
-      $("#UserJoined").append('<div class="bg-success" id="' + snapshot.val().userName + '_user"><h3>'+ snapshot.val().userName + ' has joined</h3></div>')
-
     }, function(errorObject) {
       console.log("The read failed: " + errorObject.code);
     });
