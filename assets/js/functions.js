@@ -247,24 +247,6 @@ function locationFormHandler() {
   });
 }
 
-// function selectAdmin() {
-
-//   var instance = database.ref(sitekey + '/chat');
-//   var connectedUsers = database.ref(sitekey + '/connections');
-
-//   instance.once('value', function(snapshot) {
-//     var eNum = parseInt(snapshot.val().NumberOfUsers);
-
-//     connectedUsers.once('value', function(snapshot) {
-//       var cNum = snapshot.numChildren();
-
-//       if (cNum === eNum) {
-//       	createMap();
-//       }
-//     });
-//   });
-// }
-
  function toRadians(degree){
   return degree*Math.PI/180;
  }
@@ -373,6 +355,10 @@ function removeMap(){
 
 /***initialize map and business search****/
 function initMap(latitude, longitude) {
+  $("#HomeTab").addClass("active");
+  $("#ChatTab").removeClass("active");
+  $("#Search").addClass("active in");
+  $("#Chat").removeClass("active in");
   var pyrmont = {lat: latitude, lng: longitude};
   $('#Lobby').remove();
   $('#Search').append(
