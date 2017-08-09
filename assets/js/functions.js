@@ -30,7 +30,7 @@ var chatroom = {
     database.ref(sitekey + '/chat').on("value", function(snapshot) {
       if (snapshot.child("LatestName").exists() && snapshot.child("LatestMessage").exists()) {
         $("#ChatTitle").text(' ' + snapshot.val().Chatname);
-        $('#sitekey').text('SITEKEY(Use to share this meet up): ' + sitekey);
+        $('#sitekey').append('SITEKEY (Use to share this meet up): <span>' + sitekey + '</span>');
         chatroom.chatname = snapshot.val().Chatname;
         chatroom.current_message = snapshot.val().LatestMessage;
         chatroom.current_name = snapshot.val().LatestName;
@@ -44,7 +44,7 @@ var chatroom = {
     });
     database.ref(sitekey + '/chatconnections').on("child_added", function(snapshot) {
       $("#UserList").append('<div class="row" id="' + snapshot.val().userName + '"><span class="glyphicon glyphicon-ok" style="font-size:12px;color:green"></span> ' + snapshot.val().userName + '</div>');
-      $("#UserJoined").append('<div class="bg-success" id="' + snapshot.val().userName + '_user" style="border-radius:5px;height:35px;vertical-align:center;width:100%;text-align:center"><h3>'+ snapshot.val().userName + ' has joined</h3></div>')
+      $("#UserJoined").append('<div class="bg-success" id="' + snapshot.val().userName + '_user"><h3>'+ snapshot.val().userName + ' has joined</h3></div>')
     }, function(errorObject) {
       console.log("The read failed: " + errorObject.code);
     });
@@ -104,19 +104,21 @@ $(document).ready(function() {
     var numberOfUsers = $('#NumberOfUsers').val();
     limit = parseInt(numberOfUsers);
     sitekey = keyGen();
-    database.ref(sitekey + '/chat').set({
-      NumberOfUsers: numberOfUsers,
-      LatestName: "",
-      LatestMessage: "",
-      Chatname: name
-    });
+    console.log(numberOfUsers)
+    if ( name !== '' && numberOfUsers !== '') {
+      database.ref(sitekey + '/chat').set({
+        NumberOfUsers: numberOfUsers,
+        LatestName: "",
+        LatestMessage: "",
+        Chatname: name
+      });
 
-    createSecondForm();
+      createSecondForm();
+    }
 
     $('#SubmitLocation').click(function(e) {
       e.preventDefault();
       locationFormHandler();
-      // selectAdmin();
     });
   });
 
@@ -168,7 +170,7 @@ function keyGen() {
 function createSecondForm() {
 
   $('#StartUp').empty().append(
-    '<div class="row">' +
+    '<div class="row second-form">' +
     '<div class="col-md-3"></div>' +
     '<div class="col-md-6 jumbotron">' +
     '<h2>User Info</h2>' +
