@@ -98,3 +98,6 @@ main {
 	border-radius: 0 0 5px 5px;
 }
 
+#Message {
+	font-size: 16px;
+}
