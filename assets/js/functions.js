@@ -5,12 +5,12 @@ var place = document.getElementById('Place');
 
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyBLiqyMDYTlA6TDrWvktj70eId9x5QQHeE",
-  authDomain: "kl-firebase-amazingness.firebaseapp.com",
-  databaseURL: "https://kl-firebase-amazingness.firebaseio.com",
-  projectId: "kl-firebase-amazingness",
-  storageBucket: "kl-firebase-amazingness.appspot.com",
-  messagingSenderId: "413776993773"
+  apiKey: "AIzaSyBswMwyD7IWpaSv2NuQD5uscHK4YeEjM8s",
+  authDomain: "ks-firebase-app1.firebaseapp.com",
+  databaseURL: "https://ks-firebase-app1.firebaseio.com",
+  projectId: "ks-firebase-app1",
+  storageBucket: "ks-firebase-app1.appspot.com",
+  messagingSenderId: "1024949813364"
 };
 firebase.initializeApp(config);
 

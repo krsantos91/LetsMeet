@@ -104,7 +104,7 @@
 
 // /***gets additional business info using the placeId,
 // ****appends new details to .panel-body***/
-// function getDetails(placeId, el) { 
+// function getDetails(placeId, el) {
 //   let placeService = new google.maps.places.PlacesService(place);
 //   placeService.getDetails({placeId: placeId}, function(place, status) {
 //     console.log(status);
@@ -182,3 +182,4 @@
 //     getLatLong();
 //   });
 // });
+/**Test git on mac pro**/
