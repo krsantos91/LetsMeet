@@ -56,7 +56,14 @@ var chatroom = {
 
   SubmitMessage: function() {
     event.preventDefault();
-    chatroom.current_message = $("#Message").val().trim();
+      var re = new RegExp('[^<>]+',"g");
+      var message = '';
+      var pmessage = $("#Message").val().trim();
+      var arrayStrings = pmessage.match(re);
+      arrayStrings.forEach(function(string){
+        message += string;
+      })
+    chatroom.current_message = message;
     $("#Message").val("");
     $("#Message").focus();
 
