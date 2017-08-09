@@ -11,6 +11,7 @@ var config = {
   storageBucket: "ks-firebase-app1.appspot.com",
   messagingSenderId: "1024949813364"
 };
+
 firebase.initializeApp(config);
 
 
@@ -50,7 +51,7 @@ var chatroom = {
     });
     database.ref(sitekey + '/chatconnections').on("child_removed", function(snapshot) {
       $("#" + snapshot.val().userName).remove();
-      $("#" + snapshot.val().userName +'_user').remove();      
+      $("#" + snapshot.val().userName +'_user').remove();
     });
   },
 
@@ -59,6 +60,7 @@ var chatroom = {
     chatroom.current_message = $("#Message").val().trim();
     $("#Message").val("");
     $("#Message").focus();
+
     database.ref(sitekey + '/chat').update({
       LatestName: chatroom.username,
       LatestMessage: chatroom.current_message,
@@ -413,7 +415,7 @@ function userLocation(latitude, longitude) {
 
 /***gets additional business info using the placeId,
 ****appends new details to .panel-body***/
-function getDetails(placeId, el) { 
+function getDetails(placeId, el) {
   let placeService = new google.maps.places.PlacesService(place);
   placeService.getDetails({placeId: placeId}, function(place, status) {
     console.log(status);
