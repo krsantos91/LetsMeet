@@ -3,15 +3,15 @@ var geocoder = new google.maps.Geocoder();
 var limit = 0;
 var place = document.getElementById('Place');
 
+// Initialize Firebase
 var config = {
-  apiKey: "AIzaSyC6B82IlusPIV2rMJA79A9z6uAvSr-SVEE",
-  authDomain: "friendlychat-56d31.firebaseapp.com",
-  databaseURL: "https://friendlychat-56d31.firebaseio.com",
-  projectId: "friendlychat-56d31",
-  storageBucket: "friendlychat-56d31.appspot.com",
-  messagingSenderId: "379256444845"
+  apiKey: "AIzaSyBLiqyMDYTlA6TDrWvktj70eId9x5QQHeE",
+  authDomain: "kl-firebase-amazingness.firebaseapp.com",
+  databaseURL: "https://kl-firebase-amazingness.firebaseio.com",
+  projectId: "kl-firebase-amazingness",
+  storageBucket: "kl-firebase-amazingness.appspot.com",
+  messagingSenderId: "413776993773"
 };
-
 firebase.initializeApp(config);
 
 
@@ -30,8 +30,8 @@ var chatroom = {
   UpdateChat: function() {
     database.ref(sitekey + '/chat').on("value", function(snapshot) {
       if (snapshot.child("LatestName").exists() && snapshot.child("LatestMessage").exists()) {
-        $("#ChatTitle").text("Chatroom: " + snapshot.val().Chatname);
-        $('#sitekey').text(sitekey);
+        $("#ChatTitle").text(' ' + snapshot.val().Chatname);
+        $('#sitekey').text('SITEKEY(Use to share this meet up): ' + sitekey);
         chatroom.chatname = snapshot.val().Chatname;
         chatroom.current_message = snapshot.val().LatestMessage;
         chatroom.current_name = snapshot.val().LatestName;
@@ -45,11 +45,13 @@ var chatroom = {
     });
     database.ref(sitekey + '/chatconnections').on("child_added", function(snapshot) {
       $("#UserList").append('<div class="row" id="' + snapshot.val().userName + '"><span class="glyphicon glyphicon-ok" style="font-size:12px;color:green"></span> ' + snapshot.val().userName + '</div>');
+      $("#UserJoined").append('<div class="bg-success" id="' + snapshot.val().userName + '_user" style="border-radius:5px;height:35px;vertical-align:center;width:100%;text-align:center"><h3>'+ snapshot.val().userName + ' has joined</h3></div>')
     }, function(errorObject) {
       console.log("The read failed: " + errorObject.code);
     });
     database.ref(sitekey + '/chatconnections').on("child_removed", function(snapshot) {
       $("#" + snapshot.val().userName).remove();
+      $("#" + snapshot.val().userName +'_user').remove();
     });
   },
 
@@ -58,14 +60,12 @@ var chatroom = {
     chatroom.current_message = $("#Message").val().trim();
     $("#Message").val("");
     $("#Message").focus();
-    database.ref(sitekey + '/chat').once("value").then(function(snapshot){
-      database.ref(sitekey + '/chat').set({
-        LatestName: chatroom.username,
-        LatestMessage: chatroom.current_message,
-        Chatname: chatroom.chatname,
-        NumberOfUsers: snapshot.val().NumberOfUsers
-      });
-  });
+
+    database.ref(sitekey + '/chat').update({
+      LatestName: chatroom.username,
+      LatestMessage: chatroom.current_message,
+      Chatname: chatroom.chatname
+    });
   },
 
   scrollSmoothToBottom: function(id) {
@@ -234,24 +234,6 @@ function locationFormHandler() {
   });
 }
 
-// function selectAdmin() {
-
-//   var instance = database.ref(sitekey + '/chat');
-//   var connectedUsers = database.ref(sitekey + '/connections');
-
-//   instance.once('value', function(snapshot) {
-//     var eNum = parseInt(snapshot.val().NumberOfUsers);
-
-//     connectedUsers.once('value', function(snapshot) {
-//       var cNum = snapshot.numChildren();
-
-//       if (cNum === eNum) {
-//       	createMap();
-//       }
-//     });
-//   });
-// }
-
  function toRadians(degree){
   return degree*Math.PI/180;
  }
@@ -260,11 +242,11 @@ function locationFormHandler() {
   return radian * 180/Math.PI;
  }
 
-// Input array of of arrays [latitude, longitudes]
+// Input array of objects {lat, long, username}
 function midpointMultipleLatLon(listLatLong){
   if (listLatLong.length == 1)
   {
-    return listLatLong[0];
+    return [listLatLong[0].lat, listLatLong[0].long];
   }
 
   var x = 0;
@@ -273,8 +255,8 @@ function midpointMultipleLatLon(listLatLong){
 
   listLatLong.forEach(function(latLong)
   {
-    var latitude = toRadians(latLong[0]);
-    var longitude = toRadians(latLong[1]);
+    var latitude = toRadians(latLong.lat);
+    var longitude = toRadians(latLong.long);
 
     x += Math.cos(latitude) * Math.cos(longitude);
     y += Math.cos(latitude) * Math.sin(longitude);
@@ -301,22 +283,34 @@ function createMap () {
 	});
 
     database.ref(sitekey + '/connections').on("value", function(snapshot) {
+      var difference = users - snapshot.numChildren();
+      if (difference > 1){
+        $("#waiting").text('Waiting for ' +  (users - snapshot.numChildren()) + ' more people')
+      }
+      else{
+        $("#waiting").text('Waiting for ' +  (users - snapshot.numChildren()) + ' more person')
+      }
       // var active_users = snapshot.numChildren();
-      console.log(snapshot.numChildren() === users, users);
+      //console.log(snapshot.numChildren() === users, users);
 	      if (snapshot.numChildren() === users) {
 
 				var locations = [];
 				database.ref(sitekey + "/connections").once("value").then(function(snapshot){
 					snapshot.forEach(function(childSnapshot){
-						var location = [childSnapshot.val().Location[0],childSnapshot.val().Location[1]];
+						var location = {lat: childSnapshot.val().Location[0], long: childSnapshot.val().Location[1], name: childSnapshot.val().userName };
 						locations.push(location);
 					});
 					var coordinates = midpointMultipleLatLon(locations);
 					var lat = coordinates[0];
 					var lon = coordinates[1];
 					initMap(lat, lon);
-				});
+          console.log(locations);
+          for (let location in locations) {
+            //userLocation(location[0], location[1]);
+            userLocation(locations[location].lat, locations[location].long, locations[location].name);
+          }
 
+				 });
 	      }
 
     });
@@ -324,7 +318,12 @@ function createMap () {
 
 /***initialize map and business search****/
 function initMap(latitude, longitude) {
+  $("#HomeTab").addClass("active");
+  $("#ChatTab").removeClass("active");
+  $("#Search").addClass("active in");
+  $("#Chat").removeClass("active in");
   var pyrmont = {lat: latitude, lng: longitude};
+  $('#Lobby').remove();
   $('#Search').append(
 
   	'<div id="Map"></div>' +
@@ -338,8 +337,7 @@ function initMap(latitude, longitude) {
     zoom: 13
   });
 
-  // userLocation(latitude, longitude);
-
+  //userLocation(latitude, longitude);
 
   infowindow = new google.maps.InfoWindow();
   var service = new google.maps.places.PlacesService(map);
@@ -355,7 +353,7 @@ function displayBusinesses(results, status) {
   if (status === google.maps.places.PlacesServiceStatus.OK) {
     for (var i = 0; i < results.length; i++) {
       createMarker(results[i]);
-      console.log(results[i]);
+      //console.log(results[i]);
 
       let placeId = results[i].place_id;
 
@@ -402,9 +400,9 @@ function createMarker(place) {
   });
 }
 
-function userLocation(latitude, longitude) {
-  let title = 'User Name';
-  let icon = 'assets/images/blue-marker.png';
+function userLocation(latitude, longitude, userName) {
+  let title = userName;
+  let icon = 'assets/images/man.png';
   let position = { lat: latitude, lng: longitude };
   let marker = new google.maps.Marker({
     position: position,
@@ -421,11 +419,11 @@ function userLocation(latitude, longitude) {
 
 /***gets additional business info using the placeId,
 ****appends new details to .panel-body***/
-function getDetails(placeId, el) { 
+function getDetails(placeId, el) {
   let placeService = new google.maps.places.PlacesService(place);
   placeService.getDetails({placeId: placeId}, function(place, status) {
-    console.log(status);
-    console.log(place);
+    //console.log(status);
+    //console.log(place);
 
     let phoneNumber = place.formatted_phone_number;
     let hours = place.opening_hours.weekday_text;
