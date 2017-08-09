@@ -378,7 +378,7 @@ function removeMap(){
   database.ref(sitekey + "/connections").once("value").then(function(snapshot){
     snapshot.forEach(function(childSnapshot){
       console.log(childSnapshot.val().userName);
-      $("#UserJoined").append('<div class="bg-success" id="' + childSnapshot.val().userName + '_user" style="border-radius:5px;height:35px;vertical-align:center;width:100%;text-align:center"><h3>'+ childSnapshot.val().userName + ' has joined</h3></div>');
+      $("#UserJoined").append('<div class="bg-success" id="' + childSnapshot.val().userName + '_user"><h3>'+ childSnapshot.val().userName + ' has joined</h3></div>');
     })
   })
 }

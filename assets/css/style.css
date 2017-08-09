@@ -1,3 +1,9 @@
+html, body {
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
 body {
 	background: url(../images/kevin-black.jpg) no-repeat center 100%;
 	background-size: cover;
@@ -105,5 +111,8 @@ main {
 @media screen and (max-width: 576px) {
 	#StartUp {
 		padding-top: 30px;
+	}
+	.bg-success h3 {
+		font-size: 16px;
 	}
 }
