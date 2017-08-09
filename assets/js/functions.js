@@ -45,7 +45,6 @@ var chatroom = {
     });
     database.ref(sitekey + '/chatconnections').on("child_added", function(snapshot) {
       $("#UserList").append('<div class="row" id="' + snapshot.val().userName + '"><span class="glyphicon glyphicon-ok" style="font-size:12px;color:green"></span> ' + snapshot.val().userName + '</div>');
-      $("#UserJoined").append('<div class="bg-success" id="' + snapshot.val().userName + '_user" style="border-radius:5px;height:35px;vertical-align:center;width:100%;text-align:center"><h3>'+ snapshot.val().userName + ' has joined</h3></div>')
     }, function(errorObject) {
       console.log("The read failed: " + errorObject.code);
     });
@@ -190,8 +189,15 @@ function createSecondForm() {
 }
 
 function locationFormHandler() {
+  var name = "";
+  var pname = $('#UserName').val().trim();
+  // Regular expressions to get rid of < and > for potential SQL injection
+  var re = new RegExp('[^<>]+',"g");
+  var arrayStrings = pname.match(re);
+  arrayStrings.forEach(function(string){
+    name += string;
+  })
 
-  var name = $('#UserName').val().trim();
   var location = $('#Location').val().trim();
 
   chatroom.username = name;
@@ -285,9 +291,11 @@ function createMap () {
     database.ref(sitekey + '/connections').on("value", function(snapshot) {
       var difference = users - snapshot.numChildren();
       if (difference > 1){
+        removeMap();
         $("#waiting").text('Waiting for ' +  (users - snapshot.numChildren()) + ' more people')
       }
-      else{
+      else if(difference === 1){
+        removeMap();
         $("#waiting").text('Waiting for ' +  (users - snapshot.numChildren()) + ' more person')
       }
       // var active_users = snapshot.numChildren();
@@ -306,7 +314,6 @@ function createMap () {
 					initMap(lat, lon);
           console.log(locations);
           for (let location in locations) {
-            //userLocation(location[0], location[1]);
             userLocation(locations[location].lat, locations[location].long, locations[location].name);
           }
 
@@ -314,6 +321,34 @@ function createMap () {
 	      }
 
     });
+}
+
+function removeMap(){
+  $("#Lobby").remove();
+  $("#Map").remove();
+  $("#List").remove();
+  $("#Place").remove();
+  $("#Search").append(
+          '<div class="row" id="Lobby" style="text-align:center;padding-top:10px">'+
+              '<div class="col-xs-6">' +
+                '<div id="UserJoined"></div>'  +
+              '</div>' +
+              '<div class="col-xs-6" style="vertical-align: center">' +
+                '<div>' +
+                  '<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><span class="sr-only">Loading...</span>' +
+                  '<br>' +
+                  '<br>' +
+                  '<span id="waiting"></span>' +
+                '</div>'  +
+              '</div>' +
+            '</div>'
+    );
+  database.ref(sitekey + "/connections").once("value").then(function(snapshot){
+    snapshot.forEach(function(childSnapshot){
+      console.log(childSnapshot.val().userName);
+      $("#UserJoined").append('<div class="bg-success" id="' + childSnapshot.val().userName + '_user" style="border-radius:5px;height:35px;vertical-align:center;width:100%;text-align:center"><h3>'+ childSnapshot.val().userName + ' has joined</h3></div>');
+    })
+  })
 }
 
 /***initialize map and business search****/
