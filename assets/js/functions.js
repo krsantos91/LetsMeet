@@ -53,7 +53,6 @@ var chatroom = {
     });
     database.ref(sitekey + '/chatconnections').on("child_added", function(snapshot) {
       $("#UserList").append('<div class="row" id="' + snapshot.val().userName + '"><span class="glyphicon glyphicon-ok" style="font-size:12px;color:green"></span> ' + snapshot.val().userName + '</div>');
-      $("#UserJoined").append('<div class="bg-success" id="' + snapshot.val().userName + '_user" style="border-radius:5px;height:35px;vertical-align:center;width:100%;text-align:center"><h3>'+ snapshot.val().userName + ' has joined</h3></div>')
     }, function(errorObject) {
       console.log("The read failed: " + errorObject.code);
     });
@@ -364,6 +363,12 @@ function removeMap(){
               '</div>' +             
             '</div>'
     );
+  database.ref(sitekey + "/chatconnections").once("value").then(function(snapshot){
+    snapshot.forEach(function(childSnapshot){
+      console.log(childSnapshot.val().userName);
+      $("#UserJoined").append('<div class="bg-success" id="' + childSnapshot.val().userName + '_user" style="border-radius:5px;height:35px;vertical-align:center;width:100%;text-align:center"><h3>'+ childSnapshot.val().userName + ' has joined</h3></div>');
+    })
+  })
 }
 
 /***initialize map and business search****/
