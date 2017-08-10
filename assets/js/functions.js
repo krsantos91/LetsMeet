@@ -262,7 +262,18 @@ function suggestion(){
   });
   database.ref(sitekey + '/acceptmeetup').on("value", function(snapshot){
     if (limit !== 0 && limit === snapshot.numChildren()){
-      showModal("DONE");
+      showModal("Meetup Finalized!", "Success");
+      $("#Meetup").empty();
+      $("#HomeTab").addClass("active");
+      $("#ChatTab").removeClass("active");
+      $("#MeetupTab").removeClass("active");  
+      $("#Search").addClass("active in");
+      $("#Chat").removeClass("active in");
+      $("#Meetup").removeClass("active in"); 
+      $("#Suggestion").remove();
+      $("#List").remove(); 
+      $("#Search").append('<div id="Finalized" class="jumbotron">IM GOING TO PRINT THE FINALIZED DETAILS HEREI IM JUST LAZY</div>'
+        )     
     }
   })
 }
@@ -441,6 +452,7 @@ function createMap () {
 }
 
 function removeMap(){
+  $("#Finalized").remove();
   $("#Suggestion").remove();
   $("#Meetup").empty();
   $("#Lobby").remove();
