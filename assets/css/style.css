@@ -115,4 +115,7 @@ main {
 	.bg-success h3 {
 		font-size: 16px;
 	}
+	#ChatList{
+		visibility:hidden;
+	}
 }
