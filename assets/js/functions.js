@@ -243,25 +243,29 @@ function suggestion(){
       $("#Search").removeClass("active in");
       $("#Chat").removeClass("active in");
       $("#Meetup").addClass("active in"); 
-      let container = $('<div>', {'class':'jumbotron'});
+      let container = $('<div>', {'class':'jumbotron text-center'});
       let header = $('<h3>');
       header.text(snapshot.val().Name + ' suggested:');
       let print_location = $('<h5>');
       let print_address = $('<h5>');
       let print_date = $('<h5>');
       let print_time = $('<h5>');
+      let print_accepted = $('<h6>');
       print_location.text('Location: ' + snapshot.val().Location);
       print_address.text('Addresss: ' + snapshot.val().Address);
       print_date.text('Date: ' + snapshot.val().myDate);
       print_time.text('Time: ' + snapshot.val().Time);
-      container.append(header).append(print_location).append(print_address).append(print_date).append(print_time);
+      print_accepted.html('<span id="NumberAccepted">0</span> /' + limit +' have accepted this meetup')
+      container.append(header).append(print_location).append(print_address).append(print_date).append(print_time).append(print_accepted);
       $("#Meetup").append(container);
-      $("#Meetup").append('<button id="SuggestionYes" class="btn btn-success">Yes</button>');
-      $("#Meetup").append('<button id="SuggestionNo" class="btn btn-danger">No</button>');
+      $("#Meetup").append('<button id="SuggestionYes" class="btn btn-success">Accept</button>');
+      $("#Meetup").append('<button id="SuggestionNo" class="btn btn-danger">Decline</button>');
     };   
   });
   database.ref(sitekey + '/acceptmeetup').on("value", function(snapshot){
+    $("#NumberAccepted").text(snapshot.numChildren());
     if (limit !== 0 && limit === snapshot.numChildren()){
+      active_suggestion = false;
       showModal("Meetup Finalized!", "Success");
       $("#Meetup").empty();
       $("#HomeTab").addClass("active");
@@ -272,10 +276,23 @@ function suggestion(){
       $("#Meetup").removeClass("active in"); 
       $("#Suggestion").remove();
       $("#List").remove(); 
-      $("#Search").append('<div id="Finalized" class="jumbotron">IM GOING TO PRINT THE FINALIZED DETAILS HEREI IM JUST LAZY</div>'
-        )     
-    }
-  })
+      database.ref(sitekey + '/suggestion').once("value").then(function(snap){
+        let container = $('<div>', {'class':'jumbotron text-center','id':'Finalized'});
+        let header = $('<h4>');
+        header.text('Your Meeting is set for:');
+        let print_location = $('<h3>');
+        let print_address = $('<h3>');
+        let print_date = $('<h3>');
+        let print_time = $('<h3>');
+        print_location.text('Location: ' + snap.val().Location);
+        print_address.text('Addresss: ' + snap.val().Address);
+        print_date.text('Date: ' + snap.val().myDate);
+        print_time.text('Time: ' + snap.val().Time);
+        container.append(header).append(print_location).append(print_address).append(print_date).append(print_time);
+        $("#Search").append(container); 
+      });
+    };
+  });
 }
 
 function keyGen() {
